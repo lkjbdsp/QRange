@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="QRange.cpp" />
+    <ClCompile Include="..\..\VST3_SDK\pluginterfaces\base\funknown.cpp">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\pluginterfaces\base\ustring.cpp">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\common\pluginview.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\vst\vstaudioeffect.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\vst\vstbus.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\vst\vstcomponent.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\vst\vstcomponentbase.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\vst\vstinitiids.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\vst\vstparameters.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\main\dllmain.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\main\pluginfactoryvst3.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\VST3_SDK\public.sdk\source\vst\vstsinglecomponenteffect.cpp">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\WDL\IPlug\IPlugVST3.cpp">
+      <Filter>vst3</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filterbandgroup.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="juce_core_include.cpp" />
+    <ClCompile Include="src\freqdisplay.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FilterBandDsp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filterstagedsp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="juce_audio_basics_include.cpp" />
+    <ClCompile Include="src\bandhandle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LinPhaseIIR.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FilterType.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RoutingType.cpp" />
+    <ClCompile Include="src\QRangeIControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BandEnable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ebur128\EbuMeasure.cpp">
+      <Filter>ebur128</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PresetView.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\PresetData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandAnalyser.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandAnalyserFilter.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandAnalyserView.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandPassFilterCreator.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\SimdBandFilter.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QRange.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\falignpop.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\falignpush.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\fplatform.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\ftypes.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\funknown.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\ipluginbase.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\keycodes.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\base\ustring.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstattributes.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstaudioprocessor.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstcomponent.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivsteditcontroller.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstevents.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivsthostapplication.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstmessage.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstmidicontrollers.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstparameterchanges.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstprocesscontext.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\ivstunits.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\vstpresetkeys.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\vst\vsttypes.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\pluginterfaces\gui\iplugview.h">
+      <Filter>vst3\VST3SDK\pluginterfaces\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\common\pluginview.h">
+      <Filter>vst3\VST3SDK\public.sdk\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\vst\vstaudioeffect.h">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\vst\vstbus.h">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\vst\vstcomponent.h">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\vst\vstcomponentbase.h">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\vst\vsteditcontroller.h">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\vst\vstparameters.h">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\main\pluginfactoryvst3.h">
+      <Filter>vst3\VST3SDK\public.sdk\main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\VST3_SDK\public.sdk\source\vst\vstsinglecomponenteffect.h">
+      <Filter>vst3\VST3SDK\public.sdk\vst</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\WDL\IPlug\IPlugVST3.h">
+      <Filter>vst3</Filter>
+    </ClInclude>
+    <ClInclude Include="src\filterbandgroup.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\freqdisplay.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextSlider.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FilterType.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RoutingType.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FilterBandDsp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\filterstagedsp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BandEnable.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CutOrder.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bandhandle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinPhaseIIR.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRangeIControl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QTextButton.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ebur128\EbuMeasure.h">
+      <Filter>ebur128</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PresetManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PresetView.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\PresetData.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lkjbFilter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandAnalyser.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandAnalyserFilter.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandAnalyserView.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandPassFilterCreator.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\FilterLayout.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\SimdBandFilter.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="vst3">
+      <UniqueIdentifier>{0028f8fa-40ce-4098-b1d7-1930d1a7774b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK">
+      <UniqueIdentifier>{d33dc1fa-0b31-40b9-a240-b065db740979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\pluginterfaces">
+      <UniqueIdentifier>{1da1c979-a505-4558-b877-1a2da0e4e758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\pluginterfaces\base">
+      <UniqueIdentifier>{cf0c95d2-7b5a-4afa-8a3e-546800d9b337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\pluginterfaces\vst">
+      <UniqueIdentifier>{babb4a18-d1d6-467e-af1c-fb852400f591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\pluginterfaces\gui">
+      <UniqueIdentifier>{a0598a21-18c6-4da8-98a8-bebbf0f37b34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\public.sdk">
+      <UniqueIdentifier>{bc78847c-a41c-4ad7-8a8e-2ea825bc2f8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\public.sdk\common">
+      <UniqueIdentifier>{23863805-5085-4669-8675-167aba1f0fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\public.sdk\vst">
+      <UniqueIdentifier>{00ff2592-e5ef-4ab1-8b06-c42242d80c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vst3\VST3SDK\public.sdk\main">
+      <UniqueIdentifier>{ec7b025c-4ef1-4403-956b-b3673b4715b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{fce50fbe-63a7-4b3a-bc84-d930e4775f25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ebur128">
+      <UniqueIdentifier>{1a59d197-02e6-467f-a03f-254eac469e1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\BandAnalyser">
+      <UniqueIdentifier>{10b34268-7cca-4756-9b39-88fa3260c84d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QRange.rc" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="QRange.cpp" />
+    <ClCompile Include="..\..\WDL\IPlug\IPlugVST.cpp">
+      <Filter>vst2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filterbandgroup.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="juce_core_include.cpp" />
+    <ClCompile Include="src\freqdisplay.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FilterBandDsp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filterstagedsp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="juce_audio_basics_include.cpp" />
+    <ClCompile Include="src\bandhandle.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LinPhaseIIR.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FilterType.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RoutingType.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRangeIControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BandEnable.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ebur128\EbuMeasure.cpp">
+      <Filter>ebur128</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PresetView.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="resources\PresetData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandAnalyser.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandAnalyserFilter.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandAnalyserView.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\BandPassFilterCreator.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+    <ClCompile Include="BandAnalyser\SimdBandFilter.cpp">
+      <Filter>src\BandAnalyser</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QRange.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="..\..\WDL\IPlug\IPlugVST.h">
+      <Filter>vst2</Filter>
+    </ClInclude>
+    <ClInclude Include="src\filterbandgroup.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\freqdisplay.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextSlider.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FilterType.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RoutingType.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FilterBandDsp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\filterstagedsp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BandEnable.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CutOrder.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bandhandle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LinPhaseIIR.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRangeIControl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QTextButton.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ebur128\EbuMeasure.h">
+      <Filter>ebur128</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PresetManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PresetView.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="resources\PresetData.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lkjbFilter.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandAnalyser.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandAnalyserFilter.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandAnalyserView.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\BandPassFilterCreator.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\FilterLayout.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+    <ClInclude Include="BandAnalyser\SimdBandFilter.h">
+      <Filter>src\BandAnalyser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="QRange.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="vst2">
+      <UniqueIdentifier>{ea16de74-9d15-4c60-ba09-d0924088d3e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{36d5473c-8729-4954-bd4f-1b2aeebf2fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ebur128">
+      <UniqueIdentifier>{51d9b537-fa37-4fb4-a14b-9541b0293c43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\BandAnalyser">
+      <UniqueIdentifier>{974531a2-efb0-4826-8c74-7d8c406bc228}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

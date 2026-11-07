@@ -1,0 +1,6 @@
+cairo - 1.14.12
+pixman - 0.34.0
+freetype - 2.9
+libpng - 1.6.27
+zlib - 1.2.11
+expat - 2.2.0
