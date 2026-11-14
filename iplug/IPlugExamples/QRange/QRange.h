@@ -117,13 +117,10 @@ public:
     bool getThickCurves() const;
     void setColorHints(bool show);
     bool getColorHints() const;
-    LinPhaseIIR::ProcMode getProcMode() const;
-    void setProcMode(LinPhaseIIR::ProcMode procMode);
 
     IPopupMenu* getAnalyserMenu();
     IPopupMenu* getAnalyserRangeMenu(bool includeCaption);
     IPopupMenu* getLatencySettingsMenu(bool includeCaption);
-    IPopupMenu* getProcessModeMenu(bool includeCaption);
     IPopupMenu* getRangeMenu(bool includeCaption);
     IPopupMenu* getDefaultsMenu();
     void matchOutputLoudness();
@@ -151,7 +148,6 @@ private:
 
         Band bands[kNumBands];
         ELatencySelection latencySelection = kLatencyLong;
-        LinPhaseIIR::ProcMode procMode = LinPhaseIIR::kWindowBoth;
         double outputGain = 0;
         bool bypass = false;
         bool analyserEnabled = true;

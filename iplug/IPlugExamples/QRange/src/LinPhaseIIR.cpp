@@ -1,227 +1,181 @@
+#include <cmath>
 #include "LinPhaseIIR.h"
 
+namespace MathConst
+{
+    static constexpr double doublePi = 3.141592653589793;
+}
 
 LinPhaseIIR::LinPhaseIIR(Filter& f)
-	: filter(f)
+    : filter(f)
 {
-	setBlockSize(8192);
+    setBlockSize(8192);
+}
+
+void LinPhaseIIR::allocate()
+{
+    const int len = blockSize + tailLength;
+
+    procBufferL.assign(len, 0.0);
+    procBufferR.assign(len, 0.0);
+
+    for (Stage* s : { &reversedStage, &forwardStage })
+    {
+        s->input.setSize(blockSize);
+        s->accL.assign(len, 0.0);
+        s->accR.assign(len, 0.0);
+        s->fifoL.assign(blockSize / 2, 0.0);
+        s->fifoR.assign(blockSize / 2, 0.0);
+        s->counter = 0;
+        s->fifoPos = 0;
+    }
+
+    window.resize(blockSize);
+    window2.resize(blockSize);
+    for (int i = 0; i < blockSize; ++i)
+    {
+        window[i] = 0.5 - 0.5 * std::cos(2.0 * MathConst::doublePi * (i + 0.5) / blockSize);
+        window2[i] = std::sqrt(window[i]);
+    }
 }
 
 void LinPhaseIIR::clear()
 {
-	inputCounter = 0;
-	inputBuffer.clear();
-    outputBufferL.clear(blockSize * 3 / 2);
-    outputBufferR.clear(blockSize * 3 / 2);
-	outputIndex = 0;
+    for (Stage* s : { &reversedStage, &forwardStage })
+    {
+        s->input.clear();
+        std::fill(s->accL.begin(), s->accL.end(), 0.0);
+        std::fill(s->accR.begin(), s->accR.end(), 0.0);
+        std::fill(s->fifoL.begin(), s->fifoL.end(), 0.0);
+        std::fill(s->fifoR.begin(), s->fifoR.end(), 0.0);
+        s->counter = 0;
+        s->fifoPos = 0;
+    }
 }
 
 void LinPhaseIIR::setBlockSize(int newBlockSize)
 {
-	if (newBlockSize != blockSize)
-	{
-		jassert((newBlockSize & 1) == 0);
-		blockSize = newBlockSize;
-		inputBuffer.setSize(blockSize);
-        procBufferL.realloc(blockSize);
-        procBufferR.realloc(blockSize);
-        outputBufferL.realloc(blockSize * 3 / 2);
-        outputBufferR.realloc(blockSize * 3 / 2);
-        window.realloc(blockSize);
-        window2.realloc(blockSize);
-
-        for (int i = 0; i < blockSize; ++i)
-        {
-            window[i] = 0.5f - 0.5f * std::cos(2. * juce::double_Pi * i / (blockSize));
-            window2[i] = std::sqrt(window[i]);
-        }
-
-		clear();
-	}
-}
-
-void LinPhaseIIR::processBlockReversed(double* output, const double* input, int numSamples)
-{
-	for (int i=0; i<numSamples; ++i)
-	{
-		inputBuffer.push(input[i]);
-
-		if (outputIndex >= blockSize / 2)
-		{
-            auto w = procMode == kWindowBoth ? window2.get() : window.get();
-            outputIndex = 0;
-			inputBuffer.getReversed(procBufferL.get(), nullptr);
-            
-            if (procMode != kWindowPost)
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-
-			filter.clearFilter();
-			filter.processFilter(procBufferL.get(), blockSize);
-			reverseBuffer(procBufferL.get());
-
-            if (procMode != kWindowPre)
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-
-			moveOutput(outputBufferL.get());
-
-            juce::FloatVectorOperations::add(outputBufferL + blockSize / 2, procBufferL.get(), blockSize);
-		}
-	
-		output[i] = outputBufferL[outputIndex++];
-	}
-}
-
-void LinPhaseIIR::processBlockForward(double* output, const double* input, int numSamples)
-{
-	for (int i = 0; i < numSamples; ++i)
-	{
-		inputBuffer.push(input[i]);
-
-		if (outputIndex >= blockSize / 2)
-		{
-            auto w = procMode == kWindowBoth ? window2.get() : window.get();
-            outputIndex = 0;
-			inputBuffer.getBuffer(procBufferL.get(), nullptr);
-
-            if (procMode != kWindowPost)
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-
-			filter.clearFilter();
-			filter.processFilter(procBufferL.get(), blockSize);
-            
-            if (procMode != kWindowPre)
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-
-			moveOutput(outputBufferL.get());
-
-            juce::FloatVectorOperations::add(outputBufferL + blockSize / 2, procBufferL.get(), blockSize);
-		}
-
-		output[i] = outputBufferL[outputIndex++];
-	}
-}
-
-void LinPhaseIIR::processBlockReversed(double* outL, double* outR, const double* inL, double* inR, int numSamples)
-{
-    if (outR == nullptr || inR == nullptr)
+    if (newBlockSize != blockSize)
     {
-        processBlockReversed(outL, inL, numSamples);
-        return;
+        blockSize = newBlockSize & ~1;
+        tailLength = blockSize;
+        allocate();
     }
-    
-    for (int i = 0; i < numSamples; ++i)
-    {
-        inputBuffer.push(inL[i], inR[i]);
-
-        if (outputIndex >= blockSize / 2)
-        {
-            auto w = procMode == kWindowBoth ? window2.get() : window.get();
-            outputIndex = 0;
-            inputBuffer.getReversed(procBufferL.get(), procBufferR.get());
-
-            if (procMode != kWindowPost)
-            {
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-                juce::FloatVectorOperations::multiply(procBufferR.get(), w, blockSize);
-            }
-
-            filter.clearFilter();
-            filter.processFilter(procBufferL.get(), procBufferR.get(), blockSize);
-            reverseBuffer(procBufferL.get());
-            reverseBuffer(procBufferR.get());
-
-            if (procMode != kWindowPre)
-            {
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-                juce::FloatVectorOperations::multiply(procBufferR.get(), w, blockSize);
-            }
-
-            moveOutput(outputBufferL.get());
-            moveOutput(outputBufferR.get());
-
-            juce::FloatVectorOperations::add(outputBufferL.get() + blockSize / 2, procBufferL.get(), blockSize);
-            juce::FloatVectorOperations::add(outputBufferR.get() + blockSize / 2, procBufferR.get(), blockSize);
-        }
-
-        outR[i] = outputBufferR[outputIndex];
-        outL[i] = outputBufferL[outputIndex++];
-    }
-}
-
-void LinPhaseIIR::processBlockForward(double* outL, double* outR, const double* inL, double* inR, int numSamples)
-{
-    if (outR == nullptr || inR == nullptr)
-    {
-        processBlockForward(outL, inL, numSamples);
-        return;
-    }
-    
-    for (int i = 0; i < numSamples; ++i)
-    {
-        inputBuffer.push(inL[i], inR[i]);
-
-        if (outputIndex >= blockSize / 2)
-        {
-            auto w = procMode == kWindowBoth ? window2.get() : window.get();
-            outputIndex = 0;
-            inputBuffer.getBuffer(procBufferL.get(), procBufferR.get());
-
-            if (procMode != kWindowPost)
-            {
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-                juce::FloatVectorOperations::multiply(procBufferR.get(), w, blockSize);
-            }
-
-            filter.clearFilter();
-            filter.processFilter(procBufferL.get(), procBufferR.get(), blockSize);
-
-            if (procMode != kWindowPre)
-            {
-                juce::FloatVectorOperations::multiply(procBufferL.get(), w, blockSize);
-                juce::FloatVectorOperations::multiply(procBufferR.get(), w, blockSize);
-            }
-
-            moveOutput(outputBufferL.get());
-            moveOutput(outputBufferR.get());
-
-            juce::FloatVectorOperations::add(outputBufferL.get() + blockSize / 2, procBufferL.get(), blockSize);
-            juce::FloatVectorOperations::add(outputBufferR.get() + blockSize / 2, procBufferR.get(), blockSize);
-        }
-
-        outR[i] = outputBufferR[outputIndex];
-        outL[i] = outputBufferL[outputIndex++];
-    }
-}
-
-void LinPhaseIIR::setProcMode(ProcMode newMode)
-{
-    procMode = newMode;
-}
-
-LinPhaseIIR::ProcMode LinPhaseIIR::getProcMode() const
-{
-    return procMode;
 }
 
 int LinPhaseIIR::getLatencySamples() const
 {
-    return 2 * blockSize * 3 / 2 - 4;
+    return 2 * blockSize + tailLength - 2;
 }
 
-void LinPhaseIIR::reverseBuffer(double* data) const
-{	
-	for (int i = 0; i < blockSize / 2; ++i)
-	{
-		const double tmp = data[blockSize - i - 1];
-		data[blockSize - i - 1] = data[i];
-		data[i] = tmp;
-	}
-}
-
-void LinPhaseIIR::moveOutput(double* data) const
+void LinPhaseIIR::reverse(double* data, int n)
 {
-	for (int i = 0; i < blockSize; ++i)
-        data[i] = data[i + blockSize / 2];
+    for (int i = 0, j = n - 1; i < j; ++i, --j)
+        std::swap(data[i], data[j]);
+}
 
-    juce::FloatVectorOperations::clear(data + blockSize, blockSize / 2);
+void LinPhaseIIR::runBlock(Stage& s, bool reversed, bool stereo)
+{
+    const int N = blockSize;
+    const int H = N / 2;
+    const int len = N + tailLength;
+    const double* w = window.data();
+
+    double* pL = procBufferL.data();
+    double* pR = stereo ? procBufferR.data() : nullptr;
+
+    if (reversed)
+        s.input.getReversed(pL, pR);
+    else
+        s.input.getBuffer(pL, pR);
+
+    {
+        for (int i = 0; i < N; ++i)
+        {
+            pL[i] *= w[i];
+            if (stereo) pR[i] *= w[i];
+        }
+    }
+
+    for (int i = N; i < len; ++i)
+    {
+        pL[i] = 0.0;
+        if (stereo) pR[i] = 0.0;
+    }
+
+    filter.clearFilter();
+    if (stereo)
+        filter.processFilter(pL, pR, len);
+    else
+        filter.processFilter(pL, len);
+
+    if (reversed)
+    {
+        reverse(pL, len);
+        if (stereo) reverse(pR, len);
+    }
+
+    for (int i = 0; i < len; ++i)
+    {
+        s.accL[i] += pL[i];
+        if (stereo) s.accR[i] += pR[i];
+    }
+
+    std::copy(s.accL.begin(), s.accL.begin() + H, s.fifoL.begin());
+    std::copy(s.accL.begin() + H, s.accL.end(), s.accL.begin());
+    std::fill(s.accL.end() - H, s.accL.end(), 0.0);
+
+    if (stereo)
+    {
+        std::copy(s.accR.begin(), s.accR.begin() + H, s.fifoR.begin());
+        std::copy(s.accR.begin() + H, s.accR.end(), s.accR.begin());
+        std::fill(s.accR.end() - H, s.accR.end(), 0.0);
+    }
+}
+
+void LinPhaseIIR::processStage(Stage& s, bool reversed, double* outL, double* outR,
+                               const double* inL, const double* inR, int numSamples)
+{
+    const bool stereo = outR != nullptr && inR != nullptr;
+    const int H = blockSize / 2;
+
+    for (int i = 0; i < numSamples; ++i)
+    {
+        if (stereo)
+            s.input.push(inL[i], inR[i]);
+        else
+            s.input.push(inL[i]);
+
+        if (++s.counter >= H)
+        {
+            s.counter = 0;
+            runBlock(s, reversed, stereo);
+            s.fifoPos = 0;
+        }
+
+        outL[i] = s.fifoL[s.fifoPos];
+        if (stereo)
+            outR[i] = s.fifoR[s.fifoPos];
+        ++s.fifoPos;
+    }
+}
+
+void LinPhaseIIR::processBlockReversed(double* output, const double* input, int numSamples)
+{
+    processStage(reversedStage, true, output, nullptr, input, nullptr, numSamples);
+}
+
+void LinPhaseIIR::processBlockForward(double* output, const double* input, int numSamples)
+{
+    processStage(forwardStage, false, output, nullptr, input, nullptr, numSamples);
+}
+
+void LinPhaseIIR::processBlockReversed(double* outL, double* outR, const double* inL, const double* inR, int numSamples)
+{
+    processStage(reversedStage, true, outL, outR, inL, inR, numSamples);
+}
+
+void LinPhaseIIR::processBlockForward(double* outL, double* outR, const double* inL, const double* inR, int numSamples)
+{
+    processStage(forwardStage, false, outL, outR, inL, inR, numSamples);
 }

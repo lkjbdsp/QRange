@@ -12,35 +12,35 @@ public:
 	{
 	}
 
-	void clear()
-	{
+    void clear()
+    {
         bufferL.clear(size);
         bufferR.clear(size);
         index = 0;
-	}
+    }
 
-	void setSize(int newSize)
-	{
-		if (newSize != size)
-		{
-			size = newSize;
+    void setSize(int newSize)
+    {
+        if (newSize != size)
+        {
+            size = newSize;
             bufferL.realloc(size);
             bufferR.realloc(size);
 			clear();
-		}
-	}
+        }
+    }
 
 	int getSize() const
 	{
 		return size;
 	}
 
-	void push(double sample)
-	{
-		bufferL[index++] = sample;
-		if (index >= size)
-			index = 0;
-	}
+    void push(double sample)
+    {
+        bufferL[index++] = sample;
+        if (index >= size)
+            index = 0;
+    }
 
     void push(double left, double right)
     {
@@ -51,23 +51,23 @@ public:
             index = 0;
     }
 
-	void push(const double* left, const double* right, int numSamples)
-	{
-		jassert(numSamples < size);
+    void push(const double* left, const double* right, int numSamples)
+    {
+        jassert(numSamples < size);
 
-		if (numSamples < size - index)
-		{
+        if (numSamples < size - index)
+        {
             juce::FloatVectorOperations::copy(bufferL.get() + index, left, numSamples);
 
             if (right != nullptr)
                 juce::FloatVectorOperations::copy(bufferR.get() + index, right, numSamples);
 
-			index += numSamples;
-		}
-		else
-		{
-			const int numWrite0 = size - index;
-			const int numWrite1 = numSamples - numWrite0;
+            index += numSamples;
+        }
+        else
+        {
+            const int numWrite0 = size - index;
+            const int numWrite1 = numSamples - numWrite0;
             juce::FloatVectorOperations::copy(bufferL.get() + index, left, numWrite0);
             juce::FloatVectorOperations::copy(bufferL.get(), left + numWrite0, numWrite1);
 
@@ -76,13 +76,15 @@ public:
                 juce::FloatVectorOperations::copy(bufferR.get() + index, right, numWrite0);
                 juce::FloatVectorOperations::copy(bufferR.get(), right + numWrite0, numWrite1);
             }
-			index = numWrite1;
-		}
-	}
+            index = numWrite1;
+        }
+    }
 
-	void getReversed(double* left, double* right)
-	{
-		int idx = index;
+    void getReversed(double* left, double* right) const
+    {
+        int idx = index - 1;
+        if (idx < 0)
+            idx = size - 1;
 
         if (right == nullptr)
         {
@@ -105,99 +107,94 @@ public:
                     idx = size - 1;
             }
         }
-	}
+    }
 
-	void getBuffer(double* left, double* right)
-	{
-		int idx = index + 1;
-
+    void getBuffer(double* left, double* right) const
+    {
+        int idx = index;
         if (right == nullptr)
         {
             for (int i = 0; i < size; ++i)
             {
+                left[i] = bufferL[idx++];
+
                 if (idx >= size)
                     idx = 0;
-
-                left[i] = bufferL[idx++];
             }
         }
         else
         {
             for (int i = 0; i < size; ++i)
             {
-                if (idx >= size)
-                    idx = 0;
-
                 right[i] = bufferR[idx];
                 left[i] = bufferL[idx++];
+
+                if (idx >= size)
+                    idx = 0;
             }
         }
-	}
+    }
 
 private:
 
     juce::HeapBlock<double> bufferL;
     juce::HeapBlock<double> bufferR;
-	int size = 0;
-	int index = 0;
+    int size = 0;
+    int index = 0;
 };
-
-
 
 class LinPhaseIIR
 {
 public:
 
-    enum ProcMode
+    class Filter
     {
-        kWindowPre,
-        kWindowBoth,
-        kWindowPost,
-
-        kNumProcModes
-    };
-
-	class Filter
-	{
-	public:
-		virtual ~Filter() {}
-		virtual void clearFilter() = 0;
+    public:
+        virtual ~Filter() {}
+        virtual void clearFilter() = 0;
         virtual void processFilter(double* samples, int numSamples) = 0;
         virtual void processFilter(double* samplesL, double* samplesR, int numSamples) = 0;
-	};
+    };
 
-	LinPhaseIIR(Filter& f);
-	void clear();
-	void setBlockSize(int newBlockSize);
-	void processBlockReversed(double* output, const double* input, int numSamples);
-	void processBlockForward(double* output, const double* input, int numSamples);
+    LinPhaseIIR(Filter& f);
+    void clear();
 
-    void processBlockReversed(double* outL, double* outR, const double* inL, double* inR, int numSamples);
-    void processBlockForward(double* outL, double* outR, const double* inL, double* inR, int numSamples);
+    void setBlockSize(int newBlockSize);
 
-    void setProcMode(ProcMode newMode);
-    ProcMode getProcMode() const;
+    void processBlockReversed(double* output, const double* input, int numSamples);
+    void processBlockForward(double* output, const double* input, int numSamples);
+
+    void processBlockReversed(double* outL, double* outR, const double* inL, const double* inR, int numSamples);
+    void processBlockForward(double* outL, double* outR, const double* inL, const double* inR, int numSamples);
 
     int getLatencySamples() const;
 
 private:
 
-	void reverseBuffer(double* data) const;
-	void moveOutput(double* data) const;
+    struct Stage
+    {
+        CircularBuffer input;
+        std::vector<double> accL, accR; 
+        std::vector<double> fifoL, fifoR;
+        int counter = 0;
+        int fifoPos = 0;
+    };
 
-	Filter& filter;
-	int blockSize = 0;
-	int outputIndex = 0;
+    void allocate();
+    void processStage(Stage& s, bool reversed, double* outL, double* outR,
+                      const double* inL, const double* inR, int numSamples);
+    void runBlock(Stage& s, bool reversed, bool stereo);
+    static void reverse(double* data, int n);
 
-    CircularBuffer inputBuffer;
-    juce::HeapBlock<double> procBufferL;
-    juce::HeapBlock<double> procBufferR;
-	int inputCounter = 0;
+    Filter& filter;
+    int blockSize = 0;
+    int tailLength = 0;
 
-    juce::HeapBlock<double> outputBufferL;
-    juce::HeapBlock<double> outputBufferR;
-    juce::HeapBlock<double> window;
-    juce::HeapBlock<double> window2;
+    Stage reversedStage;
+    Stage forwardStage;
 
-    ProcMode procMode = kWindowBoth;
+    std::vector<double> procBufferL;
+    std::vector<double> procBufferR;
+    std::vector<double> window;
+    std::vector<double> window2;
 };

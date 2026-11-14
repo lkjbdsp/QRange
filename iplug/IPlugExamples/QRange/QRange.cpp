@@ -51,7 +51,6 @@ public:
         menu->AddItem("EQ Bands", eq);
         menu->AddItem("Analyser", qRange->getAnalyserMenu());
         menu->AddItem("Display Magnitude Range", qRange->getRangeMenu(false));
-        menu->AddItem("Process Mode", qRange->getProcessModeMenu(false));
         menu->AddItem("Latency Setting", qRange->getLatencySettingsMenu(false));
         menu->AddItem("Defaults", qRange->getDefaultsMenu());
 
@@ -146,7 +145,6 @@ QRange::Defaults::Defaults(QRange* qRange)
     magRange = qRange->getFreqDisplay()->getMagRange();
     thickCurves = qRange->getThickCurves();
     colorHints = qRange->getColorHints();
-    procMode = qRange->getProcMode();
 }
 
 juce::XmlElement* QRange::Defaults::toXml() const
@@ -175,7 +173,6 @@ juce::XmlElement* QRange::Defaults::toXml() const
     xml->setAttribute("latencyselection", latencySelection);
     xml->setAttribute("thickcurves", thickCurves);
     xml->setAttribute("colorhints", colorHints);
-    xml->setAttribute("processmode", procMode);
     return xml;
 }
 
@@ -210,7 +207,6 @@ void QRange::Defaults::fromXml(const juce::XmlElement* xml)
     latencySelection = static_cast<ELatencySelection> (xml->getIntAttribute("latencyselection", latencySelection));
     thickCurves = xml->getBoolAttribute("thickcurves", thickCurves);
     colorHints = xml->getBoolAttribute("colorhints", colorHints);
-    procMode = static_cast<LinPhaseIIR::ProcMode> (xml->getIntAttribute("processmode", LinPhaseIIR::kWindowPost));
 }
 
 enum ELayout
@@ -669,7 +665,6 @@ juce::XmlElement* QRange::getStateXml()
     juce::XmlElement* state(new juce::XmlElement("QRANGE"));
     state->setAttribute("version", VST3_VER_STR);
     state->setAttribute("latencyselection", latencySelection);
-    state->setAttribute("processmode", getProcMode());
     
     for (int i = 0; i < NParams(); ++i)
     {
@@ -701,11 +696,6 @@ void QRange::setStateXml(const juce::XmlElement* state)
         const bool oldVersion = ! state->hasAttribute("version");
         ELatencySelection newLatSel = oldVersion ? kLatencyLong : static_cast<ELatencySelection> (state->getIntAttribute("latencyselection"));
         setLatencySelection(newLatSel);
-    }
-
-    {
-        const auto procMode = static_cast<LinPhaseIIR::ProcMode> (state->getIntAttribute("processmode", LinPhaseIIR::kWindowPost));
-        setProcMode(procMode);
     }
 
     OnParamReset();
@@ -1016,20 +1006,6 @@ bool QRange::getColorHints() const
     return colorHints;
 }
 
-LinPhaseIIR::ProcMode QRange::getProcMode() const
-{
-    return forwardIIR != nullptr ? forwardIIR->getProcMode() : LinPhaseIIR::kWindowPost;
-}
-
-void QRange::setProcMode(LinPhaseIIR::ProcMode procMode)
-{
-    if (auto p = forwardIIR.get())
-        p->setProcMode(procMode);
-
-    if (auto p = reverseIIR.get())
-        p->setProcMode(procMode);
-}
-
 IPopupMenu* QRange::getAnalyserMenu()
 {
     IPopupMenu* menu = new IPopupMenu();
@@ -1120,31 +1096,6 @@ IPopupMenu* QRange::getLatencySettingsMenu(bool includeCaption)
         const int flags = sel == curSel ? IPopupMenuItem::kChecked : IPopupMenuItem::kNoFlags;
 
         menu->AddItem(new IPopupMenuItem(labels[i], flags, f));
-    }
-
-    return menu;
-}
-
-IPopupMenu* QRange::getProcessModeMenu(bool includeCaption)
-{
-    IPopupMenu* menu = new IPopupMenu();
-    if (includeCaption)
-    {
-        menu->AddItem("Process Mode", -1, IPopupMenuItem::kDisabled);
-        menu->AddSeparator();
-    }
-
-    const char* labels[LinPhaseIIR::ProcMode::kNumProcModes] = { "Low Distortion", "Medium Distortion, OK Frequency Response", "Good Frequency Response" };
-
-    for (int i = 0; i < LinPhaseIIR::ProcMode::kNumProcModes; ++i)
-    {
-        const int flags = getProcMode() == static_cast<LinPhaseIIR::ProcMode> (i) ? IPopupMenuItem::kChecked : IPopupMenuItem::kNoFlags;
-
-        std::function<void()> setMode = [this, i]() {
-            setProcMode(static_cast<LinPhaseIIR::ProcMode> (i));
-        };
-
-        menu->AddItem(new IPopupMenuItem(labels[i], flags, setMode));
     }
 
     return menu;
